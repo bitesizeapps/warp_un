@@ -6,6 +6,8 @@ import string
 import time
 import os
 import sys
+from helpers import getTime,getFutureTime
+
 from vars import Var
 SEND_LOG = (Var.SEND_LOG)
 BOT_TOKEN = (Var.BOT_TOKEN)
@@ -59,31 +61,15 @@ def run():
 g = 0
 b = 0
 while True:
-	os.system('cls' if os.name == 'nt' else 'clear')
-	animation = ["[■□□□□□□□□□] 10%","[■■□□□□□□□□] 20%", "[■■■□□□□□□□] 30%", "[■■■■□□□□□□] 40%", "[■■■■■□□□□□] 50%", "[■■■■■■□□□□] 60%", "[■■■■■■■□□□] 70%", "[■■■■■■■■□□] 80%", "[■■■■■■■■■□] 90%", "[■■■■■■■■■■] 100%"] 
-	for i in range(len(animation)):
-		time.sleep(0.2)
-		sys.stdout.write("\r[∆] Progress: " + animation[i % len(animation)])
-		sys.stdout.flush()
-	result = run()
-	if result == 200:
-		g += 1
-		if(SEND_LOG == "1"):
-			if(HIDE_ID == "1"):
-				urllib.request.urlopen("https://api.telegram.org/bot"+ BOT_TOKEN + "/sendMessage?chat_id=" + CHANNEL_ID + "&text=" + "DATA%20RECEIVED:%20" + str(g) + "GB%20FAILED%20ATTEMPT:%20" + str(b))
-			else:
-				urllib.request.urlopen("https://api.telegram.org/bot"+ BOT_TOKEN + "/sendMessage?chat_id=" + CHANNEL_ID + "&text=" + "WARP%20ID:%20" + referrer + "%20DATA%20RECEIVED:%20" + str(g) + "GB%20FAILED%20ATTEMPT:%20" + str(b))
-		print(f"\n[•] WARP+ ID: {referrer}")
-		print(f"[✓] Added: {g} GB")
-		print(f"[#] Total: {g} Good {b} Bad")
-		for i in range(20,-1,-1):
-			sys.stdout.write(f"\033[1K\r[!] Cooldown: {i} seconds")
-			sys.stdout.flush()
-			time.sleep(1)
-	else:
-		b += 1
-		print(f"[#] Total: {g} Good {b} Bad")
-		for i in range(20,-1,-1):
-			sys.stdout.write(f"\033[1K\r[!] Cooldown: {i} seconds")
-			sys.stdout.flush()
-			time.sleep(1)
+    result = run()
+    if result == 200:
+        time.sleep(1)
+        g = g+1
+        print(f"{g} - {getTime()}")
+        time.sleep(20)
+    else:
+        b = b+1
+    if b > 20:
+        print(f"going for a nap... - be back at {getFutureTime(10)}")
+        time.sleep(600)
+        g,b = 0
